@@ -33,7 +33,7 @@ const Navbar = () => {
   const { language, switchLanguage, t } = useLanguage();
 
   const menuItems = [
-    { label: t('navbar.home'), path: '/' },
+    // Home navigation removed - replaced with phone button
   ];
 
   const langOptions = [
@@ -85,6 +85,32 @@ const Navbar = () => {
       </Box>
 
       <List sx={{ textAlign: 'center', flex: 1, px: 2 }}>
+        {/* Phone Button in Mobile Drawer */}
+        <ListItem disablePadding sx={{ justifyContent: 'center', mb: 2 }}>
+          <StyledButton
+            component="a"
+            href={phoneLink}
+            fullWidth
+            variant="primary"
+            size="medium"
+            startIcon={<PhoneIcon />}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              px: { xs: 1.5, sm: 2 },
+              py: { xs: 1.25, sm: 1.5 },
+              '& .MuiButton-startIcon': {
+                marginRight: { xs: '0.75rem', sm: '1rem' },
+                marginLeft: 0,
+              },
+            }}
+          >
+            {t('navbar.contact')}: {phoneNumber}
+          </StyledButton>
+        </ListItem>
+
+        {/* Other Menu Items */}
         {menuItems.map((item) => (
           <ListItem key={item.path} disablePadding sx={{ justifyContent: 'center', mb: 1.5 }}>
             <ListItemButton
@@ -145,6 +171,7 @@ const Navbar = () => {
           startIcon={<PhoneIcon />}
           sx={{
             display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'flex-start',
             px: { xs: 1.5, sm: 2 },
             py: { xs: 1.25, sm: 1.5 },
@@ -292,6 +319,33 @@ const Navbar = () => {
           {/* Desktop Menu - Left Side */}
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1.5 }, alignItems: 'center' }}>
+              {/* Phone Button - Direct Call */}
+              <StyledButton
+                component="a"
+                href={phoneLink}
+                variant="primary"
+                size="small"
+                startIcon={<PhoneIcon />}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  px: { xs: 1.25, md: 1.75 },
+                  py: 0.75,
+                  fontSize: '0.95rem',
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                  '& .MuiButton-startIcon': {
+                    marginRight: '0.5rem',
+                    marginLeft: 0,
+                  },
+                }}
+              >
+                {phoneNumber}
+              </StyledButton>
+
+              {/* Other Desktop Menu Items */}
               {menuItems.map((item) => (
                 <Button
                   key={item.path}

@@ -349,6 +349,13 @@ const ServicesPage = () => {
             variant="primary"
             size="large"
             startIcon={<PhoneIcon />}
+            sx={{
+              flexDirection: 'row',
+              '& .MuiButton-startIcon': {
+                marginRight: '0.75rem',
+                marginLeft: 0,
+              },
+            }}
           >
             התקשרו : 052-641-0042
           </StyledButton>

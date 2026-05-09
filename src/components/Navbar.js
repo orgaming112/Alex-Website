@@ -20,6 +20,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import { colors } from '../App';
 import StyledButton from './StyledButton';
 
@@ -29,8 +30,15 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
 
+  const { language, switchLanguage, t } = useLanguage();
+
   const menuItems = [
-    { label: 'בית', path: '/' },
+    { label: t('navbar.home'), path: '/' },
+  ];
+
+  const langOptions = [
+    { code: 'he', label: t('navbar.language.he') },
+    { code: 'ru', label: t('navbar.language.ru') },
   ];
 
   const phoneNumber = '052-641-0042';
@@ -51,7 +59,7 @@ const Navbar = () => {
       sx={{
         width: 280,
         pt: 2,
-        direction: 'rtl',
+        direction: language === 'he' ? 'rtl' : 'ltr',
         backgroundColor: colors.navy,
         height: '100%',
         display: 'flex',
@@ -146,7 +154,7 @@ const Navbar = () => {
             },
           }}
         >
-          התקשר: {phoneNumber}
+          {t('navbar.contact')}: {phoneNumber}
         </StyledButton>
 
         <StyledButton
@@ -180,7 +188,7 @@ const Navbar = () => {
             },
           }}
         >
-          WhatsApp
+          {t('navbar.whatsapp')}
         </StyledButton>
       </Box>
     </Box>
@@ -204,7 +212,7 @@ const Navbar = () => {
             justifyContent: 'flex-end',
             alignItems: 'center',
             gap: { xs: 1, md: 2 },
-            direction: 'rtl',
+            direction: language === 'he' ? 'rtl' : 'ltr',
             pr: { xs: 1, md: 2 },
           }}
         >
@@ -231,6 +239,31 @@ const Navbar = () => {
               <MenuIcon sx={{ fontSize: '1.8rem' }} />
             </IconButton>
           )}
+
+          {/* Language Switcher */}
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mr: { xs: 1, md: 2 } }}>
+            {langOptions.map((option) => (
+              <Button
+                key={option.code}
+                onClick={() => switchLanguage(option.code)}
+                size="small"
+                variant={language === option.code ? 'contained' : 'text'}
+                sx={{
+                  minWidth: '74px',
+                  color: language === option.code ? colors.white : colors.copper,
+                  backgroundColor: language === option.code ? colors.copper : 'transparent',
+                  borderRadius: '999px',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: language === option.code ? colors.copperLight : `${colors.copper}15`,
+                  },
+                }}
+              >
+                {option.label}
+              </Button>
+            ))}
+          </Box>
 
           {/* Logo / Title - Center */}
           <Typography
@@ -308,16 +341,16 @@ const Navbar = () => {
 
       {/* Mobile Drawer */}
       <Drawer
-        anchor="right"
+        anchor={language === 'he' ? 'right' : 'left'}
         open={mobileOpen}
         onClose={handleDrawerToggle}
         SlideProps={{
-          direction: 'left',
+          direction: language === 'he' ? 'left' : 'right',
         }}
         sx={{
           '& .MuiDrawer-paper': {
             backgroundColor: colors.navy,
-            direction: 'rtl',
+            direction: language === 'he' ? 'rtl' : 'ltr',
             width: 280,
             maxWidth: '100vw',
             overflowX: 'hidden',

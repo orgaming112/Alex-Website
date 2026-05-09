@@ -182,7 +182,7 @@ const whatsappNumber = '972526410042';   // Line 10
 **Navbar.js**:
 ```jsx
 <Typography>
-  מומחה אינסטלציה ותיקון  // Line 66 - Change this
+  אלכס ידי זהב // Line 66 - Change this
 </Typography>
 ```
 

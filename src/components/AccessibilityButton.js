@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, useEffect, useRef, useCallback } from 'react';import {
+import React, { useState, createContext, useContext, useEffect, useRef } from 'react';import {
   Fab,
   Drawer,
   Box,
@@ -90,7 +90,6 @@ const AccessibilityPanel = ({ open, onClose }) => {
   } = useAccessibility();
 
   const closeButtonRef = useRef(null);
-  const firstFocusableRef = useRef(null);
 
   // Handle keyboard events (Escape to close)
   useEffect(() => {
@@ -136,7 +135,6 @@ const AccessibilityPanel = ({ open, onClose }) => {
       onClose={onClose}
       role="region"
       aria-label="תפריט נגישות"
-      aria-modal="true"
       PaperProps={{
         sx: {
           backgroundColor: colors.slate,

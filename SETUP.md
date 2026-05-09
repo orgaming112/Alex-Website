@@ -170,13 +170,13 @@ const whatsappLink = `https://wa.me/${whatsappNumber}`;
 
 **App.js** (title):
 ```jsx
-<title>מומחה אינסטלציה ותיקון</title>
+<title> אלכס ידי זהב</title>
 ```
 
 **Navbar.js** (logo):
 ```jsx
 <Typography variant="h6" ... >
-  מומחה אינסטלציה ותיקון
+  אלכס ידי זהב
 </Typography>
 ```
 

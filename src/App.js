@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline, Box } from '@mui/material';
 import Navbar from './components/Navbar';
 import WhatsAppButton from './components/WhatsAppButton';
 import AccessibilityButton, { AccessibilityProvider } from './components/AccessibilityButton';
 import HomePage from './pages/HomePage';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 // Color Palette
 const colors = {
@@ -18,8 +19,7 @@ const colors = {
   deepNavy: '#060e1a',
 };
 
-const theme = createTheme({
-  direction: 'rtl',
+const themeBase = {
   palette: {
     primary: {
       main: colors.navy,
@@ -80,7 +80,6 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         html: {
-          direction: 'rtl',
           scrollBehavior: 'smooth',
           overflow: 'auto',
           overflowX: 'hidden',
@@ -186,10 +185,20 @@ const theme = createTheme({
       },
     },
   },
-});
+};
 
 function AppContent() {
+  const { language } = useLanguage();
   const location = useLocation();
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        ...themeBase,
+        direction: language === 'he' ? 'rtl' : 'ltr',
+      }),
+    [language]
+  );
 
   // Scroll to top on route change
   useEffect(() => {
@@ -197,47 +206,50 @@ function AppContent() {
   }, [location.pathname]);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        backgroundColor: colors.navy,
-        width: '100%',
-        maxWidth: '100%',
-        overflowX: 'hidden',
-      }}
-    >
-      <Navbar />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Box
-        component="main"
         sx={{
-          flex: 1,
-          pt: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          backgroundColor: colors.navy,
           width: '100%',
           maxWidth: '100%',
           overflowX: 'hidden',
+          direction: language === 'he' ? 'rtl' : 'ltr',
         }}
       >
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
+        <Navbar />
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            pt: 10,
+            width: '100%',
+            maxWidth: '100%',
+            overflowX: 'hidden',
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </Box>
       </Box>
-    </Box>
+      <WhatsAppButton />
+      <AccessibilityButton />
+    </ThemeProvider>
   );
 }
 
 function App() {
   return (
     <AccessibilityProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <LanguageProvider>
         <Router>
           <AppContent />
-          <WhatsAppButton />
-          <AccessibilityButton />
         </Router>
-      </ThemeProvider>
+      </LanguageProvider>
     </AccessibilityProvider>
   );
 }

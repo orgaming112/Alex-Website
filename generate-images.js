@@ -44,7 +44,7 @@ images.forEach((img) => {
   // Add subtitle
   ctx.fillStyle = '#8a9bb0';
   ctx.font = '24px Arial';
-  ctx.fillText('מומחה אינסטלציה ותיקון', 600, 280);
+  ctx.fillText('אלכס ידי זהב', 600, 280);
 
   // Save image
   const buffer = canvasObj.toBuffer('image/jpeg');

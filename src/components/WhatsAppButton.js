@@ -1,15 +1,15 @@
 import React from 'react';
-import { Box, Fab, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Fab, Tooltip } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { colors } from '../App';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const WhatsAppButton = () => {
   const whatsappLink = 'https://wa.me/972526410042';
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { language, t } = useLanguage();
 
   return (
-    <Tooltip title="צור קשר דרך WhatsApp">
+    <Tooltip title={t('buttons.whatsapp')}>
       <Fab
         component="a"
         href={whatsappLink}
@@ -18,7 +18,8 @@ const WhatsAppButton = () => {
         sx={{
           position: 'fixed',
           bottom: { xs: 20, md: 30 },
-          left: { xs: 20, md: 30 },
+          left: language === 'he' ? 'auto' : { xs: 20, md: 30 },
+          right: language === 'he' ? { xs: 20, md: 30 } : 'auto',
           backgroundColor: '#25d366',
           color: colors.white,
           zIndex: 999,

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline, Box } from '@mui/material';
 import Navbar from './components/Navbar';
+import PhoneButton from './components/PhoneButton';
 import WhatsAppButton from './components/WhatsAppButton';
 import AccessibilityButton, { AccessibilityProvider } from './components/AccessibilityButton';
 import HomePage from './pages/HomePage';
@@ -236,6 +237,7 @@ function AppContent() {
           </Routes>
         </Box>
       </Box>
+      <PhoneButton />
       <WhatsAppButton />
       <AccessibilityButton />
     </ThemeProvider>

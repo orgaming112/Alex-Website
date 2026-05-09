@@ -124,6 +124,46 @@
   "buttons": {
     "callNow": "התקשר עכשיו",
     "whatsapp": "צור קשר בוואטסאפ",
+    "phone": "חייג עכשיו",
     "toggleLanguage": "בחר שפה"
+  },
+  "accessibility": {
+    "button": {
+      "label": "נגישות",
+      "tooltip": "נגישות",
+      "ariaLabel": "פתח תפריט נגישות - בקרות גודל גופן, ניגודיות וצבעים"
+    },
+    "panel": {
+      "title": "♿ נגישות",
+      "closeButton": "סגור תפריט נגישות",
+      "closeButtonTitle": "סגור תפריט נגישות (Escape)",
+      "ariaLabel": "תפריט נגישות",
+      "ariaControlsLabel": "בקרות נגישות"
+    },
+    "fontSize": {
+      "label": "גודל הגופן: {percentage}%",
+      "decreaseLabel": "הקטן",
+      "decreaseName": "הקטן גודל גופן",
+      "increaseName": "הגדל גודל גופן",
+      "increaseLabel": "הגדל",
+      "resetLabel": "איפוס",
+      "resetName": "אפס גודל גופן לברירת מחדל"
+    },
+    "contrast": {
+      "label": "ניגודיות גבוהה",
+      "active": "ניגודיות גבוהה פעילה, לחץ להשבתה",
+      "inactive": "ניגודיות גבוהה כבויה, לחץ להפעלה",
+      "on": "פעיל",
+      "off": "כבוי"
+    },
+    "grayscale": {
+      "label": "מצב שחור-לבן",
+      "active": "מצב שחור-לבן פעיל, לחץ להשבתה",
+      "inactive": "מצב שחור-לבן כבוי, לחץ להפעלה",
+      "on": "פעיל",
+      "off": "כבוי"
+    },
+    "info": "ההגדרות שלך יישמרו באופן זמני בדפדפן זה",
+    "keyboardHint": "לחץ ESC כדי לסגור"
   }
 }

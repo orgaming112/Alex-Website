@@ -96,9 +96,11 @@ const ImageSlider = () => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              objectPosition: 'center 30%',
               opacity: activeStep === index ? 1 : 0,
               transition: 'opacity 0.8s ease-in-out',
               zIndex: activeStep === index ? 1 : 0,
+              backgroundColor: colors.cream,
             }}
           />
         ))}

@@ -1,23 +1,20 @@
 import React from 'react';
 import { Fab, Tooltip } from '@mui/material';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import PhoneIcon from '@mui/icons-material/Phone';
 import { colors } from '../App';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const WhatsAppButton = () => {
-  const whatsappLink = 'https://wa.me/972526410042';
+const PhoneButton = () => {
   const { t } = useLanguage();
 
   return (
-    <Tooltip title={t('buttons.whatsapp')}>
+    <Tooltip title={t('buttons.phone')}>
       <Fab
         component="a"
-        href={whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
+        href="tel:0526410042"
         sx={{
           position: 'fixed',
-          bottom: { xs: 20, md: 30 },
+          bottom: { xs: 90, md: 100 },
           left: { xs: 20, md: 30 },
           right: 'auto',
           backgroundColor: '#25d366',
@@ -38,10 +35,10 @@ const WhatsAppButton = () => {
           },
         }}
       >
-        <WhatsAppIcon sx={{ fontSize: { xs: '1.4rem', md: '2.5rem' } }} />
+        <PhoneIcon sx={{ fontSize: { xs: '1.4rem', md: '2.5rem' } }} />
       </Fab>
     </Tooltip>
   );
 };
 
-export default WhatsAppButton;
+export default PhoneButton;

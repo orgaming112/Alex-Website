@@ -1,4 +1,5 @@
-import React, { useState, createContext, useContext, useEffect, useRef } from 'react';import {
+import React, { useState, createContext, useContext, useEffect, useRef } from 'react';
+import {
   Fab,
   Drawer,
   Box,
@@ -16,6 +17,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import HighlightIcon from '@mui/icons-material/Highlight';
 import InvertColorsIcon from '@mui/icons-material/InvertColors';
 import { colors } from '../App';
+import { useLanguage } from '../contexts/LanguageContext';
 
 /**
  * AccessibilityContext - Global state for accessibility settings
@@ -79,7 +81,7 @@ export const AccessibilityProvider = ({ children }) => {
 /**
  * AccessibilityPanel - Drawer content with accessibility controls
  */
-const AccessibilityPanel = ({ open, onClose }) => {
+const AccessibilityPanel = ({ open, onClose, isRtl }) => {
   const { 
     fontSize, 
     setFontSize, 
@@ -88,6 +90,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
     grayscale, 
     setGrayscale 
   } = useAccessibility();
+  const { t } = useLanguage();
 
   const closeButtonRef = useRef(null);
 
@@ -134,7 +137,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       role="region"
-      aria-label="תפריט נגישות"
+      aria-label={t('accessibility.panel.ariaLabel')}
       PaperProps={{
         sx: {
           backgroundColor: colors.slate,
@@ -144,13 +147,14 @@ const AccessibilityPanel = ({ open, onClose }) => {
     >
       <Box
         component="nav"
-        aria-label="בקרות נגישות"
+        aria-label={t('accessibility.panel.ariaControlsLabel')}
         sx={{
           width: { xs: '80vw', sm: 300 },
           p: 3,
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
+          direction: isRtl ? 'rtl' : 'ltr',
         }}
       >
         {/* Header */}
@@ -159,6 +163,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexDirection: isRtl ? 'row-reverse' : 'row',
           }}
         >
           <Typography
@@ -171,14 +176,14 @@ const AccessibilityPanel = ({ open, onClose }) => {
               fontFamily: '"Rubik", sans-serif',
             }}
           >
-            ♿ נגישות
+            {t('accessibility.panel.title')}
           </Typography>
           <IconButton
             ref={closeButtonRef}
             onClick={onClose}
             size="small"
-            aria-label="סגור תפריט נגישות"
-            title="סגור תפריט נגישות (Escape)"
+            aria-label={t('accessibility.panel.closeButton')}
+            title={t('accessibility.panel.closeButtonTitle')}
             sx={{
               color: colors.pipeGray,
               '&:hover': { color: colors.copper },
@@ -204,9 +209,10 @@ const AccessibilityPanel = ({ open, onClose }) => {
               color: colors.copper,
               fontFamily: '"Rubik", sans-serif',
               mb: 1.5,
+              textAlign: isRtl ? 'right' : 'left',
             }}
           >
-            גודל הגופן: {Math.round(fontSize * 100)}%
+            {t('accessibility.fontSize.label').replace('{percentage}', Math.round(fontSize * 100))}
           </Typography>
           <Stack
             direction="row"
@@ -215,16 +221,17 @@ const AccessibilityPanel = ({ open, onClose }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               mb: 1,
+              flexDirection: isRtl ? 'row-reverse' : 'row',
             }}
             role="group"
             aria-labelledby="font-size-label"
           >
-            <Tooltip title="הקטן">
+            <Tooltip title={t('accessibility.fontSize.decreaseLabel')}>
               <IconButton
                 onClick={handleDecreaseFontSize}
                 disabled={fontSize <= 1}
                 size="small"
-                aria-label="הקטן גודל גופן"
+                aria-label={t('accessibility.fontSize.decreaseName')}
                 aria-disabled={fontSize <= 1}
                 sx={{
                   backgroundColor: colors.copper,
@@ -251,7 +258,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
               variant="outlined"
               size="small"
               onClick={handleResetFontSize}
-              aria-label="אפס גודל גופן לברירת מחדל"
+              aria-label={t('accessibility.fontSize.resetName')}
               sx={{
                 flex: 1,
                 borderColor: colors.copper,
@@ -267,15 +274,15 @@ const AccessibilityPanel = ({ open, onClose }) => {
                 },
               }}
             >
-              איפוס
+              {t('accessibility.fontSize.resetLabel')}
             </Button>
 
-            <Tooltip title="הגדל">
+            <Tooltip title={t('accessibility.fontSize.increaseLabel')}>
               <IconButton
                 onClick={handleIncreaseFontSize}
                 disabled={fontSize >= 1.5}
                 size="small"
-                aria-label="הגדל גודל גופן"
+                aria-label={t('accessibility.fontSize.increaseName')}
                 aria-disabled={fontSize >= 1.5}
                 sx={{
                   backgroundColor: colors.copper,
@@ -310,6 +317,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
             sx={{
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexDirection: isRtl ? 'row-reverse' : 'row',
             }}
             role="group"
             aria-labelledby="contrast-label"
@@ -320,10 +328,10 @@ const AccessibilityPanel = ({ open, onClose }) => {
               sx={{
                 fontWeight: 600,
                 color: colors.pipeGray,
-                fontFamily: '"Heebo", sans-serif',
+                fontFamily: '"Rubik", sans-serif',
               }}
             >
-              ניגודיות גבוהה
+              {t('accessibility.contrast.label')}
             </Typography>
             <Button
               variant={highContrast ? 'contained' : 'outlined'}
@@ -331,7 +339,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
               startIcon={<HighlightIcon />}
               onClick={() => setHighContrast(!highContrast)}
               aria-pressed={highContrast}
-              aria-label={highContrast ? 'ניגודיות גבוהה פעילה, לחץ להשבתה' : 'ניגודיות גבוהה כבויה, לחץ להפעלה'}
+              aria-label={highContrast ? t('accessibility.contrast.active') : t('accessibility.contrast.inactive')}
               sx={{
                 backgroundColor: highContrast ? colors.copper : 'transparent',
                 borderColor: colors.copper,
@@ -348,7 +356,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
                 },
               }}
             >
-              {highContrast ? 'פעיל' : 'כבוי'}
+              {highContrast ? t('accessibility.contrast.on') : t('accessibility.contrast.off')}
             </Button>
           </Stack>
         </Box>
@@ -363,6 +371,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
             sx={{
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexDirection: isRtl ? 'row-reverse' : 'row',
             }}
             role="group"
             aria-labelledby="grayscale-label"
@@ -373,10 +382,10 @@ const AccessibilityPanel = ({ open, onClose }) => {
               sx={{
                 fontWeight: 600,
                 color: colors.pipeGray,
-                fontFamily: '"Heebo", sans-serif',
+                fontFamily: '"Rubik", sans-serif',
               }}
             >
-              מצב שחור-לבן
+              {t('accessibility.grayscale.label')}
             </Typography>
             <Button
               variant={grayscale ? 'contained' : 'outlined'}
@@ -384,7 +393,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
               startIcon={<InvertColorsIcon />}
               onClick={() => setGrayscale(!grayscale)}
               aria-pressed={grayscale}
-              aria-label={grayscale ? 'מצב שחור-לבן פעיל, לחץ להשבתה' : 'מצב שחור-לבן כבוי, לחץ להפעלה'}
+              aria-label={grayscale ? t('accessibility.grayscale.active') : t('accessibility.grayscale.inactive')}
               sx={{
                 backgroundColor: grayscale ? colors.copper : 'transparent',
                 borderColor: colors.copper,
@@ -401,7 +410,7 @@ const AccessibilityPanel = ({ open, onClose }) => {
                 },
               }}
             >
-              {grayscale ? 'פעיל' : 'כבוי'}
+              {grayscale ? t('accessibility.grayscale.on') : t('accessibility.grayscale.off')}
             </Button>
           </Stack>
         </Box>
@@ -413,12 +422,12 @@ const AccessibilityPanel = ({ open, onClose }) => {
           variant="caption"
           sx={{
             color: colors.pipeGray,
-            fontFamily: '"Heebo", sans-serif',
-            textAlign: 'center',
+            fontFamily: '"Rubik", sans-serif',
+            textAlign: isRtl ? 'right' : 'left',
             mt: 1,
           }}
         >
-          ההגדרות שלך יישמרו באופן זמני בדפדפן זה
+          {t('accessibility.info')}
         </Typography>
 
         {/* Keyboard hint */}
@@ -426,13 +435,13 @@ const AccessibilityPanel = ({ open, onClose }) => {
           variant="caption"
           sx={{
             color: colors.pipeGray,
-            fontFamily: '"Heebo", sans-serif',
-            textAlign: 'center',
+            fontFamily: '"Rubik", sans-serif',
+            textAlign: isRtl ? 'right' : 'left',
             fontSize: '0.75rem',
             opacity: 0.8,
           }}
         >
-          לחץ ESC כדי לסגור
+          {t('accessibility.keyboardHint')}
         </Typography>
       </Box>
     </Drawer>
@@ -445,6 +454,8 @@ const AccessibilityPanel = ({ open, onClose }) => {
 const AccessibilityButton = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const fabRef = useRef(null);
+  const { language, t } = useLanguage();
+  const isRtl = language === 'he';
 
   const handleOpenPanel = () => {
     setPanelOpen(true);
@@ -460,16 +471,17 @@ const AccessibilityButton = () => {
 
   return (
     <>
-      <Tooltip title="נגישות" placement="top">
+      <Tooltip title={t('accessibility.button.tooltip')} placement="top">
         <Fab
           ref={fabRef}
           onClick={handleOpenPanel}
           aria-expanded={panelOpen}
           aria-controls="accessibility-panel-controls"
-          aria-label="פתח תפריט נגישות - בקרות גודל גופן, ניגודיות וצבעים"
+          aria-label={t('accessibility.button.ariaLabel')}
           sx={{
             position: 'fixed',
             bottom: { xs: 20, md: 30 },
+            left: 'auto',
             right: { xs: 20, md: 30 },
             backgroundColor: '#1976d2',
             color: 'white',
@@ -501,7 +513,7 @@ const AccessibilityButton = () => {
         role="region"
         aria-hidden={!panelOpen}
       >
-        <AccessibilityPanel open={panelOpen} onClose={handleClosePanel} />
+        <AccessibilityPanel open={panelOpen} onClose={handleClosePanel} isRtl={isRtl} />
       </Box>
     </>
   );

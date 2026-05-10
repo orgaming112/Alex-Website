@@ -14,7 +14,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  useTheme,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PlumbingIcon from '@mui/icons-material/Plumbing';
@@ -27,7 +26,6 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import StyledButton from '../components/StyledButton';
 
 const ServicesPage = () => {
-  const theme = useTheme();
   const [expandedService, setExpandedService] = useState(null);
 
   const handleExpand = (serviceId) => {

@@ -8,8 +8,6 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemButton,
-  ListItemText,
   Typography,
   useMediaQuery,
   useTheme,
@@ -32,13 +30,9 @@ const Navbar = () => {
 
   const { language, switchLanguage, t } = useLanguage();
 
-  const menuItems = [
-    // Home navigation removed - replaced with phone button
-  ];
-
   const langOptions = [
-    { code: 'he', label: t('navbar.language.he') },
-    { code: 'ru', label: t('navbar.language.ru') },
+    { code: 'he', label: 'עברית' },
+    { code: 'ru', label: 'Русский' },
   ];
 
   const phoneNumber = '052-641-0042';
@@ -59,7 +53,7 @@ const Navbar = () => {
       sx={{
         width: 280,
         pt: 2,
-        direction: language === 'he' ? 'rtl' : 'ltr',
+        direction: 'rtl',
         backgroundColor: colors.navy,
         height: '100%',
         display: 'flex',
@@ -110,47 +104,6 @@ const Navbar = () => {
           </StyledButton>
         </ListItem>
 
-        {/* Other Menu Items */}
-        {menuItems.map((item) => (
-          <ListItem key={item.path} disablePadding sx={{ justifyContent: 'center', mb: 1.5 }}>
-            <ListItemButton
-              component={RouterLink}
-              to={item.path}
-              onClick={handleDrawerToggle}
-              sx={{
-                py: 1.75,
-                px: 2.5,
-                textAlign: 'center',
-                borderRadius: '10px',
-                backgroundColor: 'transparent',
-                transition: 'all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                '&:hover': {
-                  backgroundColor: `${colors.copper}20`,
-                  color: colors.copper,
-                  transform: 'scale(1.05)',
-                  boxShadow: `0 4px 12px rgba(${196}, ${122}, ${58}, 0.2)`,
-                },
-                '&:active': {
-                  backgroundColor: `${colors.copper}30`,
-                  transform: 'scale(0.98)',
-                },
-              }}
-            >
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  sx: {
-                    fontFamily: '"Rubik", sans-serif',
-                    fontSize: '1.15rem',
-                    fontWeight: 700,
-                    color: colors.white,
-                    letterSpacing: '0.3px',
-                  },
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
       </List>
 
       <Divider sx={{ backgroundColor: colors.copper, opacity: 0.3, my: 2 }} />
@@ -239,7 +192,7 @@ const Navbar = () => {
             justifyContent: 'flex-end',
             alignItems: 'center',
             gap: { xs: 1, md: 2 },
-            direction: language === 'he' ? 'rtl' : 'ltr',
+            direction: 'rtl',
             pr: { xs: 1, md: 2 },
           }}
         >
@@ -325,7 +278,7 @@ const Navbar = () => {
                 href={phoneLink}
                 variant="primary"
                 size="small"
-                startIcon={<PhoneIcon />}
+                endIcon={<PhoneIcon sx={{ fontSize: '1.1rem' }} />}
                 sx={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -336,58 +289,15 @@ const Navbar = () => {
                   fontSize: '0.95rem',
                   fontWeight: 600,
                   whiteSpace: 'nowrap',
-                  '& .MuiButton-startIcon': {
-                    marginRight: '0.5rem',
-                    marginLeft: 0,
+                  '& .MuiButton-endIcon': {
+                    marginLeft: '0.5rem',
+                    marginRight: 0,
                   },
                 }}
               >
                 {phoneNumber}
               </StyledButton>
 
-              {/* Other Desktop Menu Items */}
-              {menuItems.map((item) => (
-                <Button
-                  key={item.path}
-                  component={RouterLink}
-                  to={item.path}
-                  sx={{
-                    color: colors.white,
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    fontFamily: '"Rubik", sans-serif',
-                    textTransform: 'none',
-                    position: 'relative',
-                    whiteSpace: 'nowrap',
-                    px: { xs: 1, md: 1.5 },
-                    py: 1,
-                    borderRadius: '8px',
-                    backgroundColor: 'transparent',
-                    transition: 'all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                    '&:hover': {
-                      color: colors.copper,
-                      backgroundColor: `${colors.copper}15`,
-                      transform: 'translateY(-2px)',
-                      '&::after': {
-                        width: '100%',
-                      },
-                    },
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      width: '0%',
-                      height: '3px',
-                      backgroundColor: colors.copper,
-                      borderRadius: '2px',
-                      transition: 'width 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                    },
-                  }}
-                >
-                  {item.label}
-                </Button>
-              ))}
             </Box>
           )}
         </Toolbar>
@@ -395,16 +305,16 @@ const Navbar = () => {
 
       {/* Mobile Drawer */}
       <Drawer
-        anchor={language === 'he' ? 'right' : 'left'}
+        anchor="right"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         SlideProps={{
-          direction: language === 'he' ? 'left' : 'right',
+          direction: 'left',
         }}
         sx={{
           '& .MuiDrawer-paper': {
             backgroundColor: colors.navy,
-            direction: language === 'he' ? 'rtl' : 'ltr',
+            direction: 'rtl',
             width: 280,
             maxWidth: '100vw',
             overflowX: 'hidden',

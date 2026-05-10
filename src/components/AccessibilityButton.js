@@ -1,27 +1,21 @@
 import React, { useState, createContext, useContext, useEffect, useRef } from 'react';
 import {
-  Fab,
-  Drawer,
   Box,
   Typography,
-  Button,
-  Stack,
   IconButton,
-  Divider,
+  Switch,
+  Slider,
   Tooltip,
 } from '@mui/material';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import HighlightIcon from '@mui/icons-material/Highlight';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import ContrastIcon from '@mui/icons-material/Contrast';
 import InvertColorsIcon from '@mui/icons-material/InvertColors';
+import LanguageIcon from '@mui/icons-material/Language';
 import { colors } from '../App';
 import { useLanguage } from '../contexts/LanguageContext';
 
-/**
- * AccessibilityContext - Global state for accessibility settings
- */
 const AccessibilityContext = createContext();
 
 export const useAccessibility = () => {
@@ -32,489 +26,381 @@ export const useAccessibility = () => {
   return context;
 };
 
-/**
- * AccessibilityProvider - Wraps the app to provide global accessibility settings
- */
 export const AccessibilityProvider = ({ children }) => {
-  const [fontSize, setFontSize] = useState(1); // multiplier: 1, 1.1, 1.2, 1.3, 1.5
+  const [fontSize, setFontSize] = useState(1);
   const [highContrast, setHighContrast] = useState(false);
   const [grayscale, setGrayscale] = useState(false);
 
-  // Apply settings to root element
   useEffect(() => {
-    const root = document.documentElement;
-    
-    // Font size
-    root.style.fontSize = `${16 * fontSize}px`;
-    
-    // High contrast
-    if (highContrast) {
-      root.style.filter = 'contrast(1.5)';
-    } else {
-      root.style.filter = 'grayscale(0)';
-    }
-    
-    // Grayscale
-    if (grayscale) {
-      root.style.filter = highContrast 
-        ? 'contrast(1.5) grayscale(100%)' 
-        : 'grayscale(100%)';
-    }
-  }, [fontSize, highContrast, grayscale]);
+    document.documentElement.style.fontSize = `${16 * fontSize}px`;
+  }, [fontSize]);
 
-  const value = {
-    fontSize,
-    setFontSize,
-    highContrast,
-    setHighContrast,
-    grayscale,
-    setGrayscale,
-  };
+  useEffect(() => {
+    const html = document.documentElement;
+    let filterVal = 'none';
+    if (grayscale && highContrast) filterVal = 'contrast(1.5) grayscale(100%)';
+    else if (grayscale)            filterVal = 'grayscale(100%)';
+    else if (highContrast)         filterVal = 'contrast(1.5)';
+
+    if (filterVal === 'none') {
+      html.style.filter = '';
+      html.style.backgroundColor = '';
+    } else {
+      // Setting backgroundColor on <html> prevents the body background from
+      // painting to the viewport canvas outside the filter context.
+      html.style.backgroundColor = '#0a1628';
+      html.style.filter = filterVal;
+    }
+  }, [highContrast, grayscale]);
 
   return (
-    <AccessibilityContext.Provider value={value}>
+    <AccessibilityContext.Provider value={{ fontSize, setFontSize, highContrast, setHighContrast, grayscale, setGrayscale }}>
       {children}
     </AccessibilityContext.Provider>
   );
 };
 
-/**
- * AccessibilityPanel - Drawer content with accessibility controls
- */
-const AccessibilityPanel = ({ open, onClose, isRtl }) => {
-  const { 
-    fontSize, 
-    setFontSize, 
-    highContrast, 
-    setHighContrast, 
-    grayscale, 
-    setGrayscale 
-  } = useAccessibility();
-  const { t } = useLanguage();
+const ControlCard = ({ icon, label, children }) => (
+  <Box
+    sx={{
+      background: 'rgba(255,255,255,0.04)',
+      border: '1px solid rgba(196,122,58,0.15)',
+      borderRadius: '14px',
+      p: 2,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 1.5,
+    }}
+  >
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Box sx={{ color: colors.copper, display: 'flex', alignItems: 'center' }}>
+        {icon}
+      </Box>
+      <Typography sx={{ fontFamily: '"Rubik", sans-serif', fontWeight: 600, color: colors.cream, fontSize: '0.88rem' }}>
+        {label}
+      </Typography>
+    </Box>
+    {children}
+  </Box>
+);
 
+const AccessibilityPanel = ({ open, onClose, isRtl }) => {
+  const { fontSize, setFontSize, highContrast, setHighContrast, grayscale, setGrayscale } = useAccessibility();
+  const { t, language, switchLanguage } = useLanguage();
   const closeButtonRef = useRef(null);
 
-  // Handle keyboard events (Escape to close)
   useEffect(() => {
     if (!open) return;
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
+    const handleKeyDown = (e) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, onClose]);
 
-  // Focus management when drawer opens
   useEffect(() => {
-    if (open && closeButtonRef.current) {
-      closeButtonRef.current.focus();
-    }
+    if (open && closeButtonRef.current) closeButtonRef.current.focus();
   }, [open]);
 
-  const handleIncreaseFontSize = () => {
-    if (fontSize < 1.5) {
-      setFontSize(prev => Math.min(prev + 0.1, 1.5));
-    }
-  };
-
-  const handleDecreaseFontSize = () => {
-    if (fontSize > 1) {
-      setFontSize(prev => Math.max(prev - 0.1, 1));
-    }
-  };
-
-  const handleResetFontSize = () => {
-    setFontSize(1);
-  };
+  const fontPercent = Math.round(fontSize * 100);
 
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      role="region"
-      aria-label={t('accessibility.panel.ariaLabel')}
-      PaperProps={{
-        sx: {
-          backgroundColor: colors.slate,
-          borderLeft: `3px solid ${colors.copper}`,
-        },
-      }}
-    >
+    <>
+      {/* Backdrop */}
       <Box
-        component="nav"
-        aria-label={t('accessibility.panel.ariaControlsLabel')}
+        onClick={onClose}
         sx={{
-          width: { xs: '80vw', sm: 300 },
-          p: 3,
+          position: 'fixed', inset: 0, zIndex: 1299,
+          background: 'rgba(6,14,26,0.55)',
+          backdropFilter: 'blur(4px)',
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? 'auto' : 'none',
+          transition: 'opacity 0.35s ease',
+        }}
+      />
+
+      {/* Panel */}
+      <Box
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('accessibility.panel.ariaLabel')}
+        sx={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          height: '100dvh',
+          width: { xs: '82vw', sm: '340px' },
+          zIndex: 1300,
           display: 'flex',
           flexDirection: 'column',
-          gap: 2,
+          background: `linear-gradient(160deg, #0f2040 0%, ${colors.navy} 60%, #0a1628 100%)`,
+          borderLeft: `2px solid ${colors.copper}`,
+          boxShadow: '-12px 0 48px rgba(0,0,0,0.55)',
+          transform: open ? 'translateX(0)' : 'translateX(110%)',
+          transition: 'transform 0.4s cubic-bezier(0.34, 1.28, 0.64, 1)',
           direction: isRtl ? 'rtl' : 'ltr',
+          overflowY: 'auto',
         }}
       >
         {/* Header */}
         <Box
           sx={{
+            background: `linear-gradient(135deg, ${colors.copper}22 0%, transparent 100%)`,
+            borderBottom: `1px solid ${colors.copper}30`,
+            p: 2.5,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexDirection: isRtl ? 'row-reverse' : 'row',
+            flexShrink: 0,
           }}
         >
-          <Typography
-            id="accessibility-panel-title"
-            component="h2"
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-              color: colors.copper,
-              fontFamily: '"Rubik", sans-serif',
-            }}
-          >
-            {t('accessibility.panel.title')}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexDirection: isRtl ? 'row-reverse' : 'row' }}>
+            <Box
+              sx={{
+                width: 36, height: 36, borderRadius: '10px',
+                background: `linear-gradient(135deg, ${colors.copper}, ${colors.copperLight})`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: `0 4px 12px ${colors.copper}55`,
+              }}
+            >
+              <AccessibilityNewIcon sx={{ fontSize: '1.1rem', color: '#fff' }} />
+            </Box>
+            <Typography
+              component="h2"
+              sx={{
+                fontFamily: '"Rubik", sans-serif',
+                fontWeight: 800,
+                fontSize: '1.05rem',
+                color: colors.cream,
+                letterSpacing: 0.3,
+              }}
+            >
+              {t('accessibility.panel.title')}
+            </Typography>
+          </Box>
+
           <IconButton
             ref={closeButtonRef}
             onClick={onClose}
             size="small"
             aria-label={t('accessibility.panel.closeButton')}
-            title={t('accessibility.panel.closeButtonTitle')}
             sx={{
               color: colors.pipeGray,
-              '&:hover': { color: colors.copper },
-              '&:focus-visible': {
-                outline: `2px solid ${colors.copper}`,
-                outlineOffset: '2px',
+              border: `1px solid rgba(138,155,176,0.2)`,
+              borderRadius: '8px',
+              p: 0.6,
+              transition: 'all 0.2s',
+              '&:hover': {
+                color: colors.cream,
+                borderColor: colors.copper,
+                background: `${colors.copper}18`,
               },
             }}
           >
-            <CloseIcon />
+            <CloseIcon fontSize="small" />
           </IconButton>
         </Box>
 
-        <Divider sx={{ borderColor: colors.copper, opacity: 0.2 }} />
+        {/* Controls */}
+        <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
 
-        {/* Font Size Control */}
-        <Box>
-          <Typography
-            id="font-size-label"
-            variant="body2"
-            sx={{
-              fontWeight: 600,
-              color: colors.copper,
-              fontFamily: '"Rubik", sans-serif',
-              mb: 1.5,
-              textAlign: isRtl ? 'right' : 'left',
-            }}
-          >
-            {t('accessibility.fontSize.label').replace('{percentage}', Math.round(fontSize * 100))}
+          {/* Font size */}
+          <ControlCard icon={<TextFieldsIcon sx={{ fontSize: '1.1rem' }} />} label={`${t('accessibility.fontSize.label').replace('{percentage}', fontPercent)}`}>
+            <Box sx={{ px: 0.5 }}>
+              <Slider
+                value={fontSize}
+                min={1}
+                max={1.5}
+                step={0.1}
+                onChange={(_, v) => setFontSize(v)}
+                aria-label={t('accessibility.fontSize.label').replace('{percentage}', fontPercent)}
+                sx={{
+                  color: colors.copper,
+                  '& .MuiSlider-thumb': {
+                    width: 18,
+                    height: 18,
+                    background: `linear-gradient(135deg, ${colors.copper}, ${colors.copperLight})`,
+                    boxShadow: `0 2px 8px ${colors.copper}66`,
+                    '&:hover, &.Mui-focusVisible': {
+                      boxShadow: `0 0 0 8px ${colors.copper}28`,
+                    },
+                  },
+                  '& .MuiSlider-rail': { background: 'rgba(255,255,255,0.1)', height: 4 },
+                  '& .MuiSlider-track': { height: 4, background: `linear-gradient(90deg, ${colors.copper}, ${colors.copperLight})` },
+                }}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: -0.5 }}>
+                <Typography sx={{ fontSize: '0.72rem', color: colors.pipeGray, fontFamily: '"Rubik", sans-serif' }}>100%</Typography>
+                <Typography sx={{ fontSize: '0.72rem', color: colors.pipeGray, fontFamily: '"Rubik", sans-serif' }}>150%</Typography>
+              </Box>
+            </Box>
+          </ControlCard>
+
+          {/* High contrast */}
+          <ControlCard icon={<ContrastIcon sx={{ fontSize: '1.1rem' }} />} label={t('accessibility.contrast.label')}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: isRtl ? 'row-reverse' : 'row' }}>
+              <Typography sx={{ fontFamily: '"Rubik", sans-serif', fontSize: '0.8rem', color: highContrast ? colors.copper : colors.pipeGray, transition: 'color 0.2s' }}>
+                {highContrast ? t('accessibility.contrast.on') : t('accessibility.contrast.off')}
+              </Typography>
+              <Switch
+                checked={highContrast}
+                onChange={(e) => setHighContrast(e.target.checked)}
+                aria-label={t('accessibility.contrast.label')}
+                sx={{
+                  '& .MuiSwitch-switchBase.Mui-checked': { color: colors.copper },
+                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: colors.copper },
+                  '& .MuiSwitch-track': { backgroundColor: 'rgba(255,255,255,0.15)' },
+                }}
+              />
+            </Box>
+          </ControlCard>
+
+          {/* Grayscale */}
+          <ControlCard icon={<InvertColorsIcon sx={{ fontSize: '1.1rem' }} />} label={t('accessibility.grayscale.label')}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: isRtl ? 'row-reverse' : 'row' }}>
+              <Typography sx={{ fontFamily: '"Rubik", sans-serif', fontSize: '0.8rem', color: grayscale ? colors.copper : colors.pipeGray, transition: 'color 0.2s' }}>
+                {grayscale ? t('accessibility.grayscale.on') : t('accessibility.grayscale.off')}
+              </Typography>
+              <Switch
+                checked={grayscale}
+                onChange={(e) => setGrayscale(e.target.checked)}
+                aria-label={t('accessibility.grayscale.label')}
+                sx={{
+                  '& .MuiSwitch-switchBase.Mui-checked': { color: colors.copper },
+                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: colors.copper },
+                  '& .MuiSwitch-track': { backgroundColor: 'rgba(255,255,255,0.15)' },
+                }}
+              />
+            </Box>
+          </ControlCard>
+
+          {/* Language switcher */}
+          <ControlCard icon={<LanguageIcon sx={{ fontSize: '1.1rem' }} />} label={language === 'ru' ? 'Изменить язык' : 'שינוי שפה'}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {[
+                { code: 'he', label: 'עברית' },
+                { code: 'ru', label: 'Русский' },
+              ].map(({ code, label }) => {
+                const active = language === code;
+                return (
+                  <Box
+                    key={code}
+                    component="button"
+                    onClick={() => switchLanguage(code)}
+                    aria-pressed={active}
+                    sx={{
+                      flex: 1,
+                      py: 0.9,
+                      px: 1,
+                      border: `1.5px solid ${active ? colors.copper : 'rgba(196,122,58,0.25)'}`,
+                      borderRadius: '10px',
+                      background: active
+                        ? `linear-gradient(135deg, ${colors.copper}33, ${colors.copperLight}22)`
+                        : 'rgba(255,255,255,0.03)',
+                      color: active ? colors.cream : colors.pipeGray,
+                      fontFamily: '"Rubik", sans-serif',
+                      fontWeight: active ? 700 : 400,
+                      fontSize: '0.85rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      boxShadow: active ? `0 2px 10px ${colors.copper}30` : 'none',
+                      '&:hover': {
+                        borderColor: colors.copper,
+                        color: colors.cream,
+                        background: `${colors.copper}18`,
+                      },
+                    }}
+                  >
+                    {label}
+                  </Box>
+                );
+              })}
+            </Box>
+          </ControlCard>
+
+        </Box>
+
+        {/* Footer */}
+        <Box
+          sx={{
+            p: 2,
+            borderTop: `1px solid ${colors.copper}20`,
+            flexShrink: 0,
+          }}
+        >
+          <Typography sx={{ fontFamily: '"Rubik", sans-serif', fontSize: '0.72rem', color: colors.pipeGray, textAlign: isRtl ? 'right' : 'left', lineHeight: 1.6 }}>
+            {t('accessibility.info')}
           </Typography>
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mb: 1,
-              flexDirection: isRtl ? 'row-reverse' : 'row',
-            }}
-            role="group"
-            aria-labelledby="font-size-label"
-          >
-            <Tooltip title={t('accessibility.fontSize.decreaseLabel')}>
-              <IconButton
-                onClick={handleDecreaseFontSize}
-                disabled={fontSize <= 1}
-                size="small"
-                aria-label={t('accessibility.fontSize.decreaseName')}
-                aria-disabled={fontSize <= 1}
-                sx={{
-                  backgroundColor: colors.copper,
-                  color: 'white',
-                  transition: 'all 0.2s',
-                  '&:hover:not(:disabled)': {
-                    backgroundColor: colors.copperLight,
-                  },
-                  '&:focus-visible': {
-                    outline: `2px solid ${colors.cream}`,
-                    outlineOffset: '2px',
-                  },
-                  '&:disabled': {
-                    backgroundColor: colors.pipeGray,
-                    opacity: 0.5,
-                  },
-                }}
-              >
-                <RemoveIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={handleResetFontSize}
-              aria-label={t('accessibility.fontSize.resetName')}
-              sx={{
-                flex: 1,
-                borderColor: colors.copper,
-                color: colors.copper,
-                fontFamily: '"Rubik", sans-serif',
-                '&:hover': {
-                  borderColor: colors.copperLight,
-                  backgroundColor: `rgba(${196}, ${122}, ${58}, 0.1)`,
-                },
-                '&:focus-visible': {
-                  outline: `2px solid ${colors.copper}`,
-                  outlineOffset: '2px',
-                },
-              }}
-            >
-              {t('accessibility.fontSize.resetLabel')}
-            </Button>
-
-            <Tooltip title={t('accessibility.fontSize.increaseLabel')}>
-              <IconButton
-                onClick={handleIncreaseFontSize}
-                disabled={fontSize >= 1.5}
-                size="small"
-                aria-label={t('accessibility.fontSize.increaseName')}
-                aria-disabled={fontSize >= 1.5}
-                sx={{
-                  backgroundColor: colors.copper,
-                  color: 'white',
-                  transition: 'all 0.2s',
-                  '&:hover:not(:disabled)': {
-                    backgroundColor: colors.copperLight,
-                  },
-                  '&:focus-visible': {
-                    outline: `2px solid ${colors.cream}`,
-                    outlineOffset: '2px',
-                  },
-                  '&:disabled': {
-                    backgroundColor: colors.pipeGray,
-                    opacity: 0.5,
-                  },
-                }}
-              >
-                <AddIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </Stack>
+          <Typography sx={{ fontFamily: '"Rubik", sans-serif', fontSize: '0.7rem', color: `${colors.pipeGray}90`, textAlign: isRtl ? 'right' : 'left', mt: 0.5 }}>
+            {t('accessibility.keyboardHint')}
+          </Typography>
         </Box>
-
-        <Divider sx={{ borderColor: colors.copper, opacity: 0.2 }} />
-
-        {/* High Contrast Toggle */}
-        <Box>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection: isRtl ? 'row-reverse' : 'row',
-            }}
-            role="group"
-            aria-labelledby="contrast-label"
-          >
-            <Typography
-              id="contrast-label"
-              variant="body2"
-              sx={{
-                fontWeight: 600,
-                color: colors.pipeGray,
-                fontFamily: '"Rubik", sans-serif',
-              }}
-            >
-              {t('accessibility.contrast.label')}
-            </Typography>
-            <Button
-              variant={highContrast ? 'contained' : 'outlined'}
-              size="small"
-              startIcon={<HighlightIcon />}
-              onClick={() => setHighContrast(!highContrast)}
-              aria-pressed={highContrast}
-              aria-label={highContrast ? t('accessibility.contrast.active') : t('accessibility.contrast.inactive')}
-              sx={{
-                backgroundColor: highContrast ? colors.copper : 'transparent',
-                borderColor: colors.copper,
-                color: highContrast ? 'white' : colors.copper,
-                fontFamily: '"Rubik", sans-serif',
-                fontWeight: 600,
-                transition: 'all 0.2s',
-                '&:hover': {
-                  backgroundColor: highContrast ? colors.copperLight : `rgba(${196}, ${122}, ${58}, 0.1)`,
-                },
-                '&:focus-visible': {
-                  outline: `2px solid ${colors.cream}`,
-                  outlineOffset: '2px',
-                },
-              }}
-            >
-              {highContrast ? t('accessibility.contrast.on') : t('accessibility.contrast.off')}
-            </Button>
-          </Stack>
-        </Box>
-
-        <Divider sx={{ borderColor: colors.copper, opacity: 0.2 }} />
-
-        {/* Grayscale Toggle */}
-        <Box>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection: isRtl ? 'row-reverse' : 'row',
-            }}
-            role="group"
-            aria-labelledby="grayscale-label"
-          >
-            <Typography
-              id="grayscale-label"
-              variant="body2"
-              sx={{
-                fontWeight: 600,
-                color: colors.pipeGray,
-                fontFamily: '"Rubik", sans-serif',
-              }}
-            >
-              {t('accessibility.grayscale.label')}
-            </Typography>
-            <Button
-              variant={grayscale ? 'contained' : 'outlined'}
-              size="small"
-              startIcon={<InvertColorsIcon />}
-              onClick={() => setGrayscale(!grayscale)}
-              aria-pressed={grayscale}
-              aria-label={grayscale ? t('accessibility.grayscale.active') : t('accessibility.grayscale.inactive')}
-              sx={{
-                backgroundColor: grayscale ? colors.copper : 'transparent',
-                borderColor: colors.copper,
-                color: grayscale ? 'white' : colors.copper,
-                fontFamily: '"Rubik", sans-serif',
-                fontWeight: 600,
-                transition: 'all 0.2s',
-                '&:hover': {
-                  backgroundColor: grayscale ? colors.copperLight : `rgba(${196}, ${122}, ${58}, 0.1)`,
-                },
-                '&:focus-visible': {
-                  outline: `2px solid ${colors.cream}`,
-                  outlineOffset: '2px',
-                },
-              }}
-            >
-              {grayscale ? t('accessibility.grayscale.on') : t('accessibility.grayscale.off')}
-            </Button>
-          </Stack>
-        </Box>
-
-        <Divider sx={{ borderColor: colors.copper, opacity: 0.2 }} />
-
-        {/* Info */}
-        <Typography
-          variant="caption"
-          sx={{
-            color: colors.pipeGray,
-            fontFamily: '"Rubik", sans-serif',
-            textAlign: isRtl ? 'right' : 'left',
-            mt: 1,
-          }}
-        >
-          {t('accessibility.info')}
-        </Typography>
-
-        {/* Keyboard hint */}
-        <Typography
-          variant="caption"
-          sx={{
-            color: colors.pipeGray,
-            fontFamily: '"Rubik", sans-serif',
-            textAlign: isRtl ? 'right' : 'left',
-            fontSize: '0.75rem',
-            opacity: 0.8,
-          }}
-        >
-          {t('accessibility.keyboardHint')}
-        </Typography>
       </Box>
-    </Drawer>
+    </>
   );
 };
 
-/**
- * AccessibilityButton - Floating action button for accessibility
- */
 const AccessibilityButton = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const fabRef = useRef(null);
   const { language, t } = useLanguage();
   const isRtl = language === 'he';
 
-  const handleOpenPanel = () => {
-    setPanelOpen(true);
-  };
-
   const handleClosePanel = () => {
     setPanelOpen(false);
-    // Return focus to FAB after closing
-    if (fabRef.current) {
-      fabRef.current.focus();
-    }
+    if (fabRef.current) fabRef.current.focus();
   };
 
   return (
     <>
       <Tooltip title={t('accessibility.button.tooltip')} placement="top">
-        <Fab
+        <Box
           ref={fabRef}
-          onClick={handleOpenPanel}
+          component="button"
+          onClick={() => setPanelOpen(true)}
           aria-expanded={panelOpen}
-          aria-controls="accessibility-panel-controls"
           aria-label={t('accessibility.button.ariaLabel')}
           sx={{
             position: 'fixed',
             bottom: { xs: 20, md: 30 },
-            left: 'auto',
             right: { xs: 20, md: 30 },
-            backgroundColor: '#1976d2',
-            color: 'white',
-            boxShadow: `0 6px 20px rgba(25, 118, 210, 0.35)`,
             zIndex: 1000,
-            width: { xs: 56, md: 70 },
-            height: { xs: 56, md: 70 },
-            transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
+            width: { xs: 52, md: 60 },
+            height: { xs: 52, md: 60 },
+            borderRadius: '16px',
+            border: 'none',
+            cursor: 'pointer',
+            background: `linear-gradient(135deg, #1565c0, #1976d2)`,
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 8px 24px rgba(25,118,210,0.45)',
+            transition: 'all 0.3s cubic-bezier(0.34,1.28,0.64,1)',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: -4,
+              borderRadius: '20px',
+              border: '2px solid rgba(25,118,210,0.3)',
+              animation: 'pulse-ring 2.5s ease-out infinite',
+            },
+            '@keyframes pulse-ring': {
+              '0%': { transform: 'scale(1)', opacity: 0.6 },
+              '100%': { transform: 'scale(1.3)', opacity: 0 },
+            },
             '&:hover': {
-              backgroundColor: '#1565c0',
-              boxShadow: `0 12px 32px rgba(25, 118, 210, 0.4)`,
-              transform: 'translateY(-2px)',
+              transform: 'translateY(-3px) scale(1.05)',
+              boxShadow: '0 14px 32px rgba(25,118,210,0.55)',
             },
-            '&:focus-visible': {
-              outline: `3px solid white`,
-              outlineOffset: '2px',
-            },
-            '&:active': {
-              transform: 'translateY(0)',
-            },
+            '&:active': { transform: 'scale(0.96)' },
+            '&:focus-visible': { outline: '3px solid #fff', outlineOffset: '3px' },
           }}
         >
-          <AccessibilityNewIcon sx={{ fontSize: { xs: '1.4rem', md: '2.5rem' } }} />
-        </Fab>
+          <AccessibilityNewIcon sx={{ fontSize: { xs: '1.5rem', md: '1.7rem' } }} />
+        </Box>
       </Tooltip>
 
-      <Box
-        id="accessibility-panel-controls"
-        role="region"
-        aria-hidden={!panelOpen}
-      >
-        <AccessibilityPanel open={panelOpen} onClose={handleClosePanel} isRtl={isRtl} />
-      </Box>
+      <AccessibilityPanel open={panelOpen} onClose={handleClosePanel} isRtl={isRtl} />
     </>
   );
 };

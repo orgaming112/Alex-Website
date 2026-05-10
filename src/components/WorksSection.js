@@ -10,7 +10,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  useTheme,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PlumbingIcon from '@mui/icons-material/Plumbing';
@@ -21,7 +20,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { colors } from '../App';
 
 const WorksSection = () => {
-  const theme = useTheme();
   const [expandedService, setExpandedService] = useState(null);
 
   const handleExpand = (serviceId) => {

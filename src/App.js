@@ -29,11 +29,11 @@ const themeBase = {
       main: colors.copper,
     },
     background: {
-      default: colors.navy,
+      default: colors.cream,
       paper: colors.cream,
     },
     text: {
-      primary: colors.white,
+      primary: colors.navy,
       secondary: colors.pipeGray,
     },
     divider: colors.copper,
@@ -45,7 +45,7 @@ const themeBase = {
       fontSize: '3rem',
       fontWeight: 900,
       marginBottom: '1.5rem',
-      color: colors.white,
+      color: colors.navy,
       textAlign: 'center',
     },
     h2: {
@@ -53,7 +53,7 @@ const themeBase = {
       fontSize: '2.5rem',
       fontWeight: 800,
       marginBottom: '1.5rem',
-      color: colors.white,
+      color: colors.navy,
       textAlign: 'center',
     },
     h3: {
@@ -88,9 +88,9 @@ const themeBase = {
           maxWidth: '100%',
         },
         body: {
-          backgroundColor: colors.navy,
-          color: colors.white,
-          backgroundImage: 'repeating-linear-gradient(0deg, rgba(196, 122, 58, 0.03) 0px, rgba(196, 122, 58, 0.03) 1px, transparent 1px, transparent 50px)',
+          backgroundColor: colors.cream,
+          color: colors.navy,
+          backgroundImage: 'none',
           overflow: 'auto',
           overflowX: 'hidden',
           width: '100%',
@@ -210,11 +210,12 @@ function AppContent() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box
+        id="content-wrapper"
         sx={{
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
-          backgroundColor: colors.navy,
+          backgroundColor: colors.cream,
           width: '100%',
           maxWidth: '100%',
           overflowX: 'hidden',

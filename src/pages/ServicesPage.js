@@ -22,8 +22,7 @@ import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import BuildIcon from '@mui/icons-material/Build';
 import WindowIcon from '@mui/icons-material/Window';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PhoneIcon from '@mui/icons-material/Phone';
-import StyledButton from '../components/StyledButton';
+import PhonePillButton from '../components/PhonePillButton';
 
 const ServicesPage = () => {
   const [expandedService, setExpandedService] = useState(null);
@@ -341,22 +340,7 @@ const ServicesPage = () => {
           >
             רוצה לתאם ביקור?
           </Typography>
-          <StyledButton
-            component="a"
-            href="tel:0526410042"
-            variant="primary"
-            size="large"
-            startIcon={<PhoneIcon />}
-            sx={{
-              flexDirection: 'row',
-              '& .MuiButton-startIcon': {
-                marginRight: '0.75rem',
-                marginLeft: 0,
-              },
-            }}
-          >
-            התקשרו : 052-641-0042
-          </StyledButton>
+          <PhonePillButton size="large" />
         </Box>
       </Container>
     </Box>

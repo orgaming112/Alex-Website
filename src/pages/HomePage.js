@@ -7,9 +7,12 @@ import {
   CardContent,
   Typography,
 } from '@mui/material';
-import PhoneIcon from '@mui/icons-material/Phone';
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import BoltIcon from '@mui/icons-material/Bolt';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import HandshakeIcon from '@mui/icons-material/Handshake';
 import ImageSlider from '../components/ImageSlider';
-import StyledButton from '../components/StyledButton';
+import PhonePillButton from '../components/PhonePillButton';
 import ServicesSection from '../components/ServicesSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { colors } from '../App';
@@ -28,209 +31,97 @@ const HomePage = () => {
       <ServicesSection />
 
       {/* Why Choose Us */}
-      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 8 } }}>
-        <Box sx={{ textAlign: 'center', mb: 5 }}>
-          <Typography
-            variant="h2"
-            sx={{
-              mb: 2,
-              fontSize: { xs: '1.8rem', md: '2.5rem' },
-              color: colors.navy,
-              fontFamily: '"Rubik", sans-serif',
-              fontWeight: 700,
-              lineHeight: 1.3,
-            }}
-          >
-            {t('home.whyChooseTitle')}
-          </Typography>
-          {/* Copper underline bar */}
-          <Box
-            sx={{
-              width: '60px',
-              height: '4px',
-              backgroundColor: colors.copper,
-              margin: '0 auto',
-              borderRadius: '2px',
-            }}
-          />
-        </Box>
-
-        <Typography
-          variant="body1"
-          sx={{
-            color: colors.pipeGray,
-            fontFamily: '"Heebo", sans-serif',
-            fontSize: { xs: '0.95rem', md: '1.1rem' },
-            lineHeight: 1.7,
-            fontWeight: 400,
-            textAlign: 'center',
-          }}
-        >
-          {t('home.whyChooseText')}
-        </Typography>
-
-        <Grid container spacing={{ xs: 3, md: 4 }} sx={{ mt: 1 }}>
-          <Grid item xs={12} md={6}>
-            <Card
+      <Box sx={{ backgroundColor: colors.navy, py: { xs: 6, md: 9 } }}>
+        <Container maxWidth="lg">
+          <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
+            <Typography
+              variant="h2"
               sx={{
-                backgroundColor: colors.slate,
-                boxShadow: `0 4px 12px rgba(${10}, ${22}, ${40}, 0.15)`,
-                borderRadius: '12px',
-                transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: `0 8px 20px rgba(${196}, ${122}, ${58}, 0.2)`,
-                },
+                mb: 2,
+                fontSize: { xs: '1.8rem', md: '2.5rem' },
+                color: colors.white,
+                fontFamily: '"Rubik", sans-serif',
+                fontWeight: 700,
+                lineHeight: 1.3,
               }}
             >
-              <CardContent sx={{ py: 2.5, px: 2.5 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 1.5,
-                    fontWeight: 700,
-                    color: colors.copper,
-                    fontFamily: '"Rubik", sans-serif',
-                    fontSize: '1.05rem',
-                  }}
-                >
-                  {t('home.features.experienceTitle')}
-                </Typography>
-                <Typography
-                  sx={{
-                    color: colors.pipeGray,
-                    fontFamily: '"Heebo", sans-serif',
-                    lineHeight: 1.6,
-                    fontSize: '0.95rem',
-                  }}
-                >
-                  {t('home.features.experienceText')}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Card
+              {t('home.whyChooseTitle')}
+            </Typography>
+            <Box sx={{ width: '60px', height: '4px', backgroundColor: colors.copper, margin: '0 auto 20px', borderRadius: '2px' }} />
+            <Typography
               sx={{
-                backgroundColor: colors.slate,
-                boxShadow: `0 4px 12px rgba(${10}, ${22}, ${40}, 0.15)`,
-                borderRadius: '12px',
-                transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: `0 8px 20px rgba(${196}, ${122}, ${58}, 0.2)`,
-                },
+                color: colors.white,
+                fontFamily: '"Rubik", sans-serif',
+                fontSize: { xs: '0.95rem', md: '1.1rem' },
+                fontWeight: 600,
+                lineHeight: 1.7,
+                maxWidth: '600px',
+                margin: '0 auto',
               }}
             >
-              <CardContent sx={{ py: 2.5, px: 2.5 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 1.5,
-                    fontWeight: 700,
-                    color: colors.copper,
-                    fontFamily: '"Rubik", sans-serif',
-                    fontSize: '1.05rem',
-                  }}
-                >
-                  {t('home.features.quickResponseTitle')}
-                </Typography>
-                <Typography
-                  sx={{
-                    color: colors.pipeGray,
-                    fontFamily: '"Heebo", sans-serif',
-                    lineHeight: 1.6,
-                    fontSize: '0.95rem',
-                  }}
-                >
-                  {t('home.features.quickResponseText')}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+              {t('home.whyChooseText')}
+            </Typography>
+          </Box>
 
-          <Grid item xs={12} md={6}>
-            <Card
-              sx={{
-                backgroundColor: colors.slate,
-                boxShadow: `0 4px 12px rgba(${10}, ${22}, ${40}, 0.15)`,
-                borderRadius: '12px',
-                transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: `0 8px 20px rgba(${196}, ${122}, ${58}, 0.2)`,
-                },
-              }}
-            >
-              <CardContent sx={{ py: 2.5, px: 2.5 }}>
-                <Typography
-                  variant="h6"
+          <Grid container spacing={3} justifyContent="center">
+            {[
+              { icon: <WorkHistoryIcon sx={{ fontSize: '2rem' }} />, title: t('home.features.experienceTitle'), text: t('home.features.experienceText') },
+              { icon: <BoltIcon sx={{ fontSize: '2rem' }} />, title: t('home.features.quickResponseTitle'), text: t('home.features.quickResponseText') },
+              { icon: <VerifiedIcon sx={{ fontSize: '2rem' }} />, title: t('home.features.qualityTitle'), text: t('home.features.qualityText') },
+              { icon: <HandshakeIcon sx={{ fontSize: '2rem' }} />, title: t('home.features.fairPriceTitle'), text: t('home.features.fairPriceText') },
+            ].map((feature, i) => (
+              <Grid item xs={6} sm={6} lg={3} key={i} sx={{ display: 'flex' }}>
+                <Card
                   sx={{
-                    mb: 1.5,
-                    fontWeight: 700,
-                    color: colors.copper,
-                    fontFamily: '"Rubik", sans-serif',
-                    fontSize: '1.05rem',
+                    flex: 1,
+                    backgroundColor: colors.slate,
+                    border: `1px solid rgba(196, 122, 58, 0.18)`,
+                    borderRadius: '16px',
+                    boxShadow: `0 4px 20px rgba(10, 22, 40, 0.35)`,
+                    transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
+                    '&:hover': {
+                      transform: 'translateY(-6px)',
+                      boxShadow: `0 12px 32px rgba(196, 122, 58, 0.22)`,
+                      borderColor: `rgba(196, 122, 58, 0.45)`,
+                    },
                   }}
                 >
-                  {t('home.features.qualityTitle')}
-                </Typography>
-                <Typography
-                  sx={{
-                    color: colors.pipeGray,
-                    fontFamily: '"Heebo", sans-serif',
-                    lineHeight: 1.6,
-                    fontSize: '0.95rem',
-                  }}
-                >
-                  {t('home.features.qualityText')}
-                </Typography>
-              </CardContent>
-            </Card>
+                  <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: { xs: 52, sm: 64 },
+                        height: { xs: 52, sm: 64 },
+                        borderRadius: '50%',
+                        backgroundColor: `rgba(196, 122, 58, 0.15)`,
+                        border: `2px solid rgba(196, 122, 58, 0.4)`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: colors.copper,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {feature.icon}
+                    </Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
+                        color: colors.copper,
+                        fontFamily: '"Rubik", sans-serif',
+                        fontSize: { xs: '1rem', sm: '1.15rem' },
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {feature.title}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Card
-              sx={{
-                backgroundColor: colors.slate,
-                boxShadow: `0 4px 12px rgba(${10}, ${22}, ${40}, 0.15)`,
-                borderRadius: '12px',
-                transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: `0 8px 20px rgba(${196}, ${122}, ${58}, 0.2)`,
-                },
-              }}
-            >
-              <CardContent sx={{ py: 2.5, px: 2.5 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 1.5,
-                    fontWeight: 700,
-                    color: colors.copper,
-                    fontFamily: '"Rubik", sans-serif',
-                    fontSize: '1.05rem',
-                  }}
-                >
-                  {t('home.features.fairPriceTitle')}
-                </Typography>
-                <Typography
-                  sx={{
-                    color: colors.pipeGray,
-                    fontFamily: '"Heebo", sans-serif',
-                    lineHeight: 1.6,
-                    fontSize: '0.95rem',
-                  }}
-                >
-                  {t('home.features.fairPriceText')}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Box>
 
       {/* Contact Section */}
       <Box
@@ -254,33 +145,7 @@ const HomePage = () => {
           >
             {t('home.contactTitle')}
           </Typography>
-          <Typography
-            variant="h5"
-            sx={{
-              mb: 3,
-              fontSize: { xs: '1rem', md: '1.3rem' },
-              opacity: 0.9,
-              fontFamily: '"Heebo", sans-serif',
-            }}
-          >
-            {t('home.contactSubtitle')}
-          </Typography>
-          <StyledButton
-            component="a"
-            href="tel:0526410042"
-            variant="primary"
-            size="large"
-            startIcon={<PhoneIcon />}
-            sx={{
-              flexDirection: 'row',
-              '& .MuiButton-startIcon': {
-                marginLeft: 0,
-                marginRight: '0.75rem',
-              },
-            }}
-          >
-            {t('home.contactButton')}
-          </StyledButton>
+          <PhonePillButton size="large" />
         </Container>
       </Box>
     </Box>

@@ -9,35 +9,20 @@ import {
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { colors } from '../App';
+import { useLanguage } from '../contexts/LanguageContext';
 
-// Sample images from /photos/home folder
 const sliderImages = [
-  {
-    id: 1,
-    title: 'שירותי אינסטלציה',
-    src: '/photos/home/image1.jpeg',
-  },
-  {
-    id: 2,
-    title: 'תיקון ברזים',
-    src: '/photos/home/image2.jpeg',
-  },
-  {
-    id: 3,
-    title: 'שירותי תיקון כללי',
-    src: '/photos/home/image3.jpeg',
-  },
-  {
-    id: 4,
-    title: 'התקנת מערכות מים',
-    src: '/photos/home/image4.jpeg',
-  },
+  { id: 1, titleKey: 'slider.images.slide1.title', src: '/photos/home/image1.jpeg' },
+  { id: 2, titleKey: 'slider.images.slide2.title', src: '/photos/home/image2.jpeg' },
+  { id: 3, titleKey: 'slider.images.slide3.title', src: '/photos/home/image3.jpeg' },
+  { id: 4, titleKey: 'slider.images.slide4.title', src: '/photos/home/image4.jpeg' },
 ];
 
 const ImageSlider = () => {
   const [activeStep, setActiveStep] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useLanguage();
   const maxSteps = sliderImages.length;
 
   // Auto-play functionality
@@ -88,9 +73,9 @@ const ImageSlider = () => {
             component="img"
             src={image.src}
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/1200x500?text=' + image.title;
+              e.target.src = 'https://via.placeholder.com/1200x500?text=' + t(image.titleKey);
             }}
-            alt={image.title}
+            alt={t(image.titleKey)}
             sx={{
               position: 'absolute',
               width: '100%',
@@ -129,7 +114,7 @@ const ImageSlider = () => {
               color: colors.copper,
             }}
           >
-            {sliderImages[activeStep].title}
+            {t(sliderImages[activeStep].titleKey)}
           </Box>
         </Box>
 
@@ -137,6 +122,7 @@ const ImageSlider = () => {
         {/* Left Button - Previous Slide (for RTL) */}
         <IconButton
           onClick={handleBack}
+          aria-label="תמונה קודמת"
           sx={{
             position: 'absolute',
             top: '50%',
@@ -161,6 +147,7 @@ const ImageSlider = () => {
         {/* Right Button - Next Slide (for RTL) */}
         <IconButton
           onClick={handleNext}
+          aria-label="תמונה הבאה"
           sx={{
             position: 'absolute',
             top: '50%',

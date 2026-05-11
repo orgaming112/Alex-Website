@@ -16,11 +16,11 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import PhoneIcon from '@mui/icons-material/Phone';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { colors } from '../App';
 import StyledButton from './StyledButton';
+import PhonePillButton from './PhonePillButton';
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -35,8 +35,6 @@ const Navbar = () => {
     { code: 'ru', label: 'Русский' },
   ];
 
-  const phoneNumber = '052-641-0042';
-  const phoneLink = 'tel:+972526410042';
   const whatsappLink = 'https://wa.me/972526410042';
 
   const handleDrawerToggle = () => {
@@ -81,27 +79,7 @@ const Navbar = () => {
       <List sx={{ textAlign: 'center', flex: 1, px: 2 }}>
         {/* Phone Button in Mobile Drawer */}
         <ListItem disablePadding sx={{ justifyContent: 'center', mb: 2 }}>
-          <StyledButton
-            component="a"
-            href={phoneLink}
-            fullWidth
-            variant="primary"
-            size="medium"
-            startIcon={<PhoneIcon />}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              px: { xs: 1.5, sm: 2 },
-              py: { xs: 1.25, sm: 1.5 },
-              '& .MuiButton-startIcon': {
-                marginRight: { xs: '0.75rem', sm: '1rem' },
-                marginLeft: 0,
-              },
-            }}
-          >
-            {t('navbar.contact')}: {phoneNumber}
-          </StyledButton>
+          <PhonePillButton size="large" fullWidth />
         </ListItem>
 
       </List>
@@ -115,27 +93,7 @@ const Navbar = () => {
         flexDirection: 'column',
         gap: { xs: 1.5, sm: 2 },
       }}>
-        <StyledButton
-          component="a"
-          href={phoneLink}
-          fullWidth
-          variant="primary"
-          size="medium"
-          startIcon={<PhoneIcon />}
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            px: { xs: 1.5, sm: 2 },
-            py: { xs: 1.25, sm: 1.5 },
-            '& .MuiButton-startIcon': {
-              marginRight: { xs: '0.75rem', sm: '1rem' },
-              marginLeft: 0,
-            },
-          }}
-        >
-          {t('navbar.contact')}: {phoneNumber}
-        </StyledButton>
+        <PhonePillButton size="large" fullWidth />
 
         <StyledButton
           component="a"
@@ -255,7 +213,7 @@ const Navbar = () => {
               textDecoration: 'none',
               color: colors.copper,
               fontWeight: 900,
-              fontSize: { xs: '1.2rem', md: '1.5rem' },
+              fontSize: { xs: language === 'ru' ? '0.85rem' : '1.1rem', md: '1.5rem' },
               letterSpacing: 0.5,
               fontFamily: '"Rubik", sans-serif',
               textAlign: 'center',
@@ -266,37 +224,14 @@ const Navbar = () => {
               },
             }}
           >
-            אלכס ידי זהב - אינסטלטור מומחה
+            {t('navbar.title')}
           </Typography>
 
           {/* Desktop Menu - Left Side */}
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1.5 }, alignItems: 'center' }}>
               {/* Phone Button - Direct Call */}
-              <StyledButton
-                component="a"
-                href={phoneLink}
-                variant="primary"
-                size="small"
-                endIcon={<PhoneIcon sx={{ fontSize: '1.1rem' }} />}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  px: { xs: 1.25, md: 1.75 },
-                  py: 0.75,
-                  fontSize: '0.95rem',
-                  fontWeight: 600,
-                  whiteSpace: 'nowrap',
-                  '& .MuiButton-endIcon': {
-                    marginLeft: '0.5rem',
-                    marginRight: 0,
-                  },
-                }}
-              >
-                {phoneNumber}
-              </StyledButton>
+              <PhonePillButton size="compact" />
 
             </Box>
           )}

@@ -9,14 +9,14 @@ const ServicesSection = () => {
   const { t } = useLanguage();
 
   return (
-    <Box sx={{ backgroundColor: colors.cream, py: { xs: 6, md: 10 } }}>
-      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
-        <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
+    <Box sx={{ backgroundColor: colors.cream, py: { xs: 3, md: 10 } }}>
+      <Container maxWidth="lg" sx={{ px: { xs: 1.5, sm: 3, md: 4 } }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 3, md: 6 } }}>
           <Typography
             variant="h2"
             sx={{
               mb: 2,
-              fontSize: { xs: '2rem', md: '2.8rem' },
+              fontSize: { xs: '1.6rem', md: '2.8rem' },
               color: colors.navy,
               fontFamily: '"Rubik", sans-serif',
               fontWeight: 700,
@@ -36,41 +36,11 @@ const ServicesSection = () => {
           />
         </Box>
 
-        <Grid container justifyContent="center" sx={{ mb: 4 }}>
-          <Grid item xs={12} md={10}>
-            <Typography
-              variant="body1"
-              sx={{
-                color: colors.pipeGray,
-                fontFamily: '"Heebo", sans-serif',
-                fontSize: { xs: '0.97rem', md: '1.1rem' },
-                lineHeight: 1.8,
-                textAlign: 'center',
-              }}
-            >
-              {t('home.servicesIntro')}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: colors.pipeGray,
-                fontFamily: '"Heebo", sans-serif',
-                fontSize: { xs: '0.97rem', md: '1.1rem' },
-                lineHeight: 1.8,
-                mt: 1,
-                textAlign: 'center',
-              }}
-            >
-              {t('home.servicesSubtext')}
-            </Typography>
-          </Grid>
-        </Grid>
+        <Divider sx={{ borderColor: colors.copper, opacity: 0.35, mb: { xs: 3, md: 5 } }} />
 
-        <Divider sx={{ borderColor: colors.copper, opacity: 0.35, mb: 5 }} />
-
-        <Box sx={{ display: 'grid', gap: 24 }}>
-          {servicesData.map((service) => (
-            <ServiceCategory key={service.id} service={service} />
+        <Box sx={{ display: 'grid', gap: { xs: 3, md: 12 } }}>
+          {servicesData.map((service, index) => (
+            <ServiceCategory key={service.id} service={service} imageIndex={index + 1} />
           ))}
         </Box>
       </Container>

@@ -7,24 +7,24 @@ import {
   CardContent,
   CardHeader,
   Typography,
-  Button,
   Collapse,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  useTheme,
 } from '@mui/material';
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PlumbingIcon from '@mui/icons-material/Plumbing';
 import { colors } from '../App';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import BuildIcon from '@mui/icons-material/Build';
-import WindowIcon from '@mui/icons-material/Window';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhonePillButton from '../components/PhonePillButton';
 
 const ServicesPage = () => {
+  const theme = useTheme();
   const [expandedService, setExpandedService] = useState(null);
 
   const handleExpand = (serviceId) => {
@@ -46,19 +46,6 @@ const ServicesPage = () => {
       ],
     },
     {
-      id: 2,
-      title: 'עבודות חשמל ותיקור',
-      icon: ElectricBoltIcon,
-      description: 'שירותי חשמל דירתי ותיקור',
-      details: [
-        'התקנת שקעים וחיבורים',
-        'תיקור לוחות חשמל',
-        'בדיקת בטיחות חשמלית',
-        'התקנת משאבות ודוודים',
-        'בדיקות שנתיות',
-      ],
-    },
-    {
       id: 3,
       title: 'תיקון כללי ותיקור',
       icon: BuildIcon,
@@ -69,19 +56,6 @@ const ServicesPage = () => {
         'תיקור טיח וצבע',
         'תיקור מכשירים חשמליים',
         'עבודות אחרות בהגדרה',
-      ],
-    },
-    {
-      id: 4,
-      title: 'עבודות יד וריהוט',
-      icon: WindowIcon,
-      description: 'עבודות יד וריהוט מותאם',
-      details: [
-        'סידור וספרים מעצבות',
-        'קביעת מידוגים',
-        'תיקור וציפוי ריהוט',
-        'התקנת מראות וצילומים',
-        'עבודות קרנישים',
       ],
     },
   ];

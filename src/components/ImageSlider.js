@@ -1,13 +1,11 @@
 import React from 'react';
-import { Box, Typography, Chip } from '@mui/material';
-import BoltIcon from '@mui/icons-material/Bolt';
+import { Box, Typography } from '@mui/material';
 import PhonePillButton from './PhonePillButton';
 import { colors } from '../App';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const ImageSlider = () => {
   const { language } = useLanguage();
-  const isRtl = language === 'he';
 
   const content = {
     he: {

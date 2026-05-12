@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Box, Typography, Dialog, IconButton, Tooltip } from '@mui/material';
+import { Card, Box, Typography, Dialog, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import { colors } from '../App';

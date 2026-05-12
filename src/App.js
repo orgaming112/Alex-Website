@@ -6,6 +6,7 @@ import PhoneButton from './components/PhoneButton';
 import WhatsAppButton from './components/WhatsAppButton';
 import AccessibilityButton, { AccessibilityProvider } from './components/AccessibilityButton';
 import HomePage from './pages/HomePage';
+import ServicesPage from './pages/ServicesPage';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 // Color Palette
@@ -235,6 +236,7 @@ function AppContent() {
         >
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/services" element={<ServicesPage />} />
           </Routes>
         </Box>
       </Box>

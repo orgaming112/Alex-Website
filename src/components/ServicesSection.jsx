@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Box, Typography, Divider, Grid } from '@mui/material';
+import { Container, Box, Typography, Divider } from '@mui/material';
 import ServiceCategory from './ServiceCategory';
 import { servicesData } from '../data/servicesData';
 import { useLanguage } from '../contexts/LanguageContext';

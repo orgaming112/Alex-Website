@@ -1,201 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  IconButton,
-  MobileStepper,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import React from 'react';
+import { Box, Typography, Chip } from '@mui/material';
+import BoltIcon from '@mui/icons-material/Bolt';
+import PhonePillButton from './PhonePillButton';
 import { colors } from '../App';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const sliderImages = [
-  { id: 1, titleKey: 'slider.images.slide1.title', src: '/photos/home/image1.jpeg' },
-  { id: 2, titleKey: 'slider.images.slide2.title', src: '/photos/home/image2.jpeg' },
-  { id: 3, titleKey: 'slider.images.slide3.title', src: '/photos/home/image3.jpeg' },
-  { id: 4, titleKey: 'slider.images.slide4.title', src: '/photos/home/image4.jpeg' },
-];
-
 const ImageSlider = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { t } = useLanguage();
-  const maxSteps = sliderImages.length;
+  const { language } = useLanguage();
+  const isRtl = language === 'he';
 
-  // Auto-play functionality
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
-    }, 5000); // Change image every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [maxSteps]);
-
-  const handleNext = () => {
-    setActiveStep((prevStep) => (prevStep + 1) % maxSteps);
+  const content = {
+    he: {
+      badge: '⚡ זמין 24/7',
+      title: 'מגיע אליך מהיר',
+      subtitle: 'שירות נייד ומקצועי — סתימות, אינסטלציה ותיקונים באזור ראשון והסביבה',
+    },
+    ru: {
+      badge: '⚡ Доступен 24/7',
+      title: 'Приедем быстро',
+      subtitle: 'Мобильный профессиональный сервис — засоры, сантехника и ремонт в районе Ришон и окрестностях',
+    },
   };
 
-  const handleBack = () => {
-    setActiveStep((prevStep) => (prevStep - 1 + maxSteps) % maxSteps);
-  };
+  const c = content[language] || content.he;
 
   return (
     <Box
       sx={{
         position: 'relative',
         width: '100%',
-        maxWidth: '100%',
         height: { xs: '300px', sm: '400px', md: '500px' },
         overflow: 'hidden',
-        overflowX: 'hidden',
-        borderRadius: '10px',
-        boxShadow: `0 8px 24px ${colors.navy}40`,
+        borderRadius: '12px',
+        boxShadow: `0 8px 32px rgba(10,22,40,0.5)`,
         border: `3px solid ${colors.copper}`,
       }}
     >
-      {/* Slider Container */}
+      {/* Background image */}
       <Box
-        sx={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: '100%',
-          height: '100%',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Images */}
-        {sliderImages.map((image, index) => (
-          <Box
-            key={image.id}
-            component="img"
-            src={image.src}
-            onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/1200x500?text=' + t(image.titleKey);
-            }}
-            alt={t(image.titleKey)}
-            sx={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center 30%',
-              opacity: activeStep === index ? 1 : 0,
-              transition: 'opacity 0.8s ease-in-out',
-              zIndex: activeStep === index ? 1 : 0,
-              backgroundColor: colors.cream,
-            }}
-          />
-        ))}
-
-        {/* Overlay with title */}
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: `linear-gradient(to top, ${colors.navy}DD, transparent)`,
-            color: colors.white,
-            p: 3,
-            zIndex: 2,
-            textAlign: isMobile ? 'center' : 'right',
-          }}
-        >
-          <Box
-            component="h2"
-            sx={{
-              margin: 0,
-              fontSize: { xs: '1.5rem', md: '2rem' },
-              fontWeight: 700,
-              fontFamily: '"Rubik", sans-serif',
-              color: colors.copper,
-            }}
-          >
-            {t(sliderImages[activeStep].titleKey)}
-          </Box>
-        </Box>
-
-        {/* Navigation Arrows */}
-        {/* Left Button - Previous Slide (for RTL) */}
-        <IconButton
-          onClick={handleBack}
-          aria-label="תמונה קודמת"
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: 16,
-            transform: 'translateY(-50%)',
-            zIndex: 3,
-            backgroundColor: `${colors.copper}CC`,
-            color: colors.white,
-            width: 48,
-            height: 48,
-            '&:hover': {
-              backgroundColor: colors.copper,
-              transform: 'translateY(-50%) scale(1.1)',
-              opacity: 0.9,
-            },
-            transition: 'all 0.3s ease',
-          }}
-        >
-          <KeyboardArrowLeft sx={{ fontSize: '2rem' }} />
-        </IconButton>
-
-        {/* Right Button - Next Slide (for RTL) */}
-        <IconButton
-          onClick={handleNext}
-          aria-label="תמונה הבאה"
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            right: 16,
-            transform: 'translateY(-50%)',
-            zIndex: 3,
-            backgroundColor: `${colors.copper}CC`,
-            color: colors.white,
-            width: 48,
-            height: 48,
-            '&:hover': {
-              backgroundColor: colors.copper,
-              transform: 'translateY(-50%) scale(1.1)',
-              opacity: 0.9,
-            },
-            transition: 'all 0.3s ease',
-          }}
-        >
-          <KeyboardArrowRight sx={{ fontSize: '2rem' }} />
-        </IconButton>
-      </Box>
-
-      {/* Indicators */}
-      <MobileStepper
-        steps={maxSteps}
-        position="bottom"
-        activeStep={activeStep}
+        component="img"
+        src="/photos/home/image1.jpg"
+        alt="אלכס ידי זהב - אינסטלטור נייד"
         sx={{
           position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: 'transparent',
-          zIndex: 4,
-          justifyContent: 'center',
-          '& .MuiMobileStepper-dotActive': {
-            backgroundColor: colors.copper,
-          },
-          '& .MuiMobileStepper-dot': {
-            backgroundColor: `${colors.copper}66`,
-          },
-        }}
-        nextButton={<div />}
-        backButton={<div />}
-        LinearProgressProps={{
-          sx: { display: 'none' },
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center 40%',
         }}
       />
+
+      {/* Gradient overlay — כהה משמאל תמיד */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to right, rgba(6,14,26,0.92) 0%, rgba(6,14,26,0.75) 40%, rgba(6,14,26,0.15) 100%)',
+        }}
+      />
+
+      {/* Bottom gradient */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to top, rgba(6,14,26,0.6) 0%, transparent 50%)',
+        }}
+      />
+
+      {/* Content */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          px: { xs: 3, sm: 5, md: 7 },
+          direction: 'ltr',
+          zIndex: 2,
+        }}
+      >
+        {/* Badge */}
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 0.5,
+            backgroundColor: `${colors.copper}22`,
+            border: `1.5px solid ${colors.copper}`,
+            borderRadius: '999px',
+            px: 1.5,
+            py: 0.4,
+            mb: { xs: 1.5, md: 2 },
+          }}
+        >
+          <Typography
+            sx={{
+              color: colors.copper,
+              fontFamily: '"Rubik", sans-serif',
+              fontWeight: 700,
+              fontSize: { xs: '0.78rem', md: '0.9rem' },
+              letterSpacing: 0.5,
+            }}
+          >
+            {c.badge}
+          </Typography>
+        </Box>
+
+        {/* Title */}
+        <Typography
+          sx={{
+            fontFamily: '"Rubik", sans-serif',
+            fontWeight: 900,
+            fontSize: { xs: '1.9rem', sm: '2.6rem', md: '3.2rem' },
+            color: colors.white,
+            lineHeight: 1.1,
+            mb: { xs: 1, md: 1.5 },
+            textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+            maxWidth: { xs: '85%', md: '55%' },
+          }}
+        >
+          {c.title}
+        </Typography>
+
+        {/* Subtitle */}
+        <Typography
+          sx={{
+            fontFamily: '"Heebo", sans-serif',
+            fontSize: { xs: '0.88rem', sm: '1rem', md: '1.1rem' },
+            color: 'rgba(255,255,255,0.8)',
+            mb: { xs: 2, md: 3 },
+            maxWidth: { xs: '90%', md: '50%' },
+            lineHeight: 1.6,
+          }}
+        >
+          {c.subtitle}
+        </Typography>
+
+        {/* CTA */}
+        <PhonePillButton size="large" />
+      </Box>
     </Box>
   );
 };

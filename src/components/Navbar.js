@@ -79,7 +79,7 @@ const Navbar = () => {
       <List sx={{ textAlign: 'center', flex: 1, px: 2 }}>
         {/* Phone Button in Mobile Drawer */}
         <ListItem disablePadding sx={{ justifyContent: 'center', mb: 2 }}>
-          <PhonePillButton size="large" fullWidth />
+          <PhonePillButton size="compact" fullWidth />
         </ListItem>
 
       </List>
@@ -93,7 +93,7 @@ const Navbar = () => {
         flexDirection: 'column',
         gap: { xs: 1.5, sm: 2 },
       }}>
-        <PhonePillButton size="large" fullWidth />
+        <PhonePillButton size="compact" fullWidth />
 
         <StyledButton
           component="a"

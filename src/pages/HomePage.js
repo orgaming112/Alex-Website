@@ -28,10 +28,10 @@ const HomePage = () => {
       </Container>
 
       {/* Services Section */}
-      <ServicesSection />
+      <Box id="services"><ServicesSection /></Box>
 
       {/* Why Choose Us */}
-      <Box sx={{ backgroundColor: colors.navy, py: { xs: 6, md: 9 } }}>
+      <Box id="about" sx={{ backgroundColor: colors.navy, py: { xs: 6, md: 9 } }}>
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
             <Typography
@@ -125,6 +125,7 @@ const HomePage = () => {
 
       {/* Contact Section */}
       <Box
+        id="contact"
         sx={{
           backgroundColor: colors.navy,
           color: 'white',

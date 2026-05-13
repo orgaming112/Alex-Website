@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -26,6 +26,12 @@ import PhonePillButton from '../components/PhonePillButton';
 const ServicesPage = () => {
   const theme = useTheme();
   const [expandedService, setExpandedService] = useState(null);
+
+  useEffect(() => {
+    document.title = 'השירותים שלנו | אלכס ידי זהב';
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', 'שירותי אינסטלציה ותיקון כללי – התקנת ברזים, תיקון ביוב, תיקון דלתות וחלונות. צרו קשר לקבלת הצעת מחיר.');
+  }, []);
 
   const handleExpand = (serviceId) => {
     setExpandedService(expandedService === serviceId ? null : serviceId);

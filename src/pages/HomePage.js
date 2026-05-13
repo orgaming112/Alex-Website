@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
   Box,
@@ -19,6 +19,12 @@ import { colors } from '../App';
 
 const HomePage = () => {
   const { t } = useLanguage();
+
+  useEffect(() => {
+    document.title = 'אלכס ידי זהב | אינסטלציה ותיקון כללי';
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', 'יש לכם סתימה ? אתם מראשון והסביבה, אלכס ידי זהב - מומחה סתימות זמין לכם כאן 24/7');
+  }, []);
 
   return (
     <Box sx={{ width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>

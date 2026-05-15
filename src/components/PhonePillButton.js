@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { colors } from '../App';
+import { trackPhoneConversion } from '../utils/trackConversion';
 
 const PhonePillButton = ({ size = 'large', fullWidth = false }) => {
   const isCompact = size === 'compact';
@@ -10,6 +11,7 @@ const PhonePillButton = ({ size = 'large', fullWidth = false }) => {
     <Box
       component="a"
       href="tel:0526410042"
+      onClick={trackPhoneConversion}
       sx={{
         display: 'inline-flex',
         alignItems: 'center',

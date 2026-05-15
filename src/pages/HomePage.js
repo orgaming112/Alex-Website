@@ -21,7 +21,7 @@ const HomePage = () => {
   const { t } = useLanguage();
 
   useEffect(() => {
-    document.title = 'אלכס ידי זהב | אינסטלציה ותיקון כללי';
+    document.title = 'אלכס ידי זהב | מומחה סתימות ושירותי אינסטלציה';
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', 'יש לכם סתימה ? אתם מראשון והסביבה, אלכס ידי זהב - מומחה סתימות זמין לכם כאן 24/7');
   }, []);

@@ -1,5 +1,6 @@
 # Firebase
 firebase-debug.log
+.firebase/
 
 # Dependencies
 /node_modules

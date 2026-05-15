@@ -3,6 +3,7 @@ import { Fab, Tooltip } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { colors } from '../App';
 import { useLanguage } from '../contexts/LanguageContext';
+import { trackPhoneConversion } from '../utils/trackConversion';
 
 const PhoneButton = () => {
   const { t } = useLanguage();
@@ -12,6 +13,7 @@ const PhoneButton = () => {
       <Fab
         component="a"
         href="tel:0526410042"
+        onClick={trackPhoneConversion}
         sx={{
           position: 'fixed',
           bottom: { xs: 90, md: 100 },

@@ -3,6 +3,7 @@ import { Fab, Tooltip } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { colors } from '../App';
 import { useLanguage } from '../contexts/LanguageContext';
+import { trackPhoneConversion } from '../utils/trackConversion';
 
 const WhatsAppButton = () => {
   const whatsappLink = 'https://wa.me/972526410042';
@@ -15,6 +16,7 @@ const WhatsAppButton = () => {
         href={whatsappLink}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={trackPhoneConversion}
         sx={{
           position: 'fixed',
           bottom: { xs: 20, md: 30 },

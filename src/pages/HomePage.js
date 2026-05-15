@@ -152,7 +152,7 @@ const HomePage = () => {
           >
             {t('home.contactTitle')}
           </Typography>
-          <PhonePillButton size="large" />
+          <PhonePillButton size="large" iconLeft />
         </Container>
       </Box>
     </Box>

@@ -4,7 +4,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import { colors } from '../App';
 import { trackPhoneConversion } from '../utils/trackConversion';
 
-const PhonePillButton = ({ size = 'large', fullWidth = false }) => {
+const PhonePillButton = ({ size = 'large', fullWidth = false, iconLeft = false }) => {
   const isCompact = size === 'compact';
 
   return (
@@ -18,6 +18,7 @@ const PhonePillButton = ({ size = 'large', fullWidth = false }) => {
         textDecoration: 'none',
         width: fullWidth ? '100%' : 'auto',
         justifyContent: fullWidth ? 'center' : 'flex-start',
+        direction: iconLeft ? 'ltr' : undefined,
         background: `linear-gradient(135deg, ${colors.copper} 0%, ${colors.copperLight} 100%)`,
         borderRadius: '60px',
         boxShadow: '0 8px 24px rgba(196, 122, 58, 0.25)',

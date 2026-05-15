@@ -79,7 +79,7 @@ const Navbar = () => {
       <List sx={{ textAlign: 'center', flex: 1, px: 2 }}>
         {/* Phone Button in Mobile Drawer */}
         <ListItem disablePadding sx={{ justifyContent: 'center', mb: 2 }}>
-          <PhonePillButton size="compact" fullWidth />
+          <PhonePillButton size="compact" fullWidth iconLeft />
         </ListItem>
 
       </List>
@@ -93,7 +93,7 @@ const Navbar = () => {
         flexDirection: 'column',
         gap: { xs: 1.5, sm: 2 },
       }}>
-        <PhonePillButton size="compact" fullWidth />
+        <PhonePillButton size="compact" fullWidth iconLeft />
 
         <StyledButton
           component="a"
@@ -231,7 +231,7 @@ const Navbar = () => {
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1.5 }, alignItems: 'center' }}>
               {/* Phone Button - Direct Call */}
-              <PhonePillButton size="compact" />
+              <PhonePillButton size="compact" iconLeft />
 
             </Box>
           )}
